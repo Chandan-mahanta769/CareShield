@@ -10,16 +10,24 @@ import socket from "../socket";
 import API from "../api";
 
 import AIMonitor from "../components/AIMonitor";
+import { demoCandidates, demoAlerts } from "../data/demoData";
 
 export default function Dashboard() {
 
   const [candidates, setCandidates] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [filter, setFilter] = useState("ALL");
+  const [demoMode, setDemoMode] = useState(false);
 
   const rootRef = useRef(null);
 
   useEffect(() => {
+    if (demoMode) {
+      setCandidates(demoCandidates);
+      setAlerts(demoAlerts);
+      return;
+    }
+
     const fetchData = async () => {
       try {
         const [candidateRes, alertRes] = await Promise.all([
@@ -35,7 +43,7 @@ export default function Dashboard() {
     };
 
     fetchData();
-  }, []);
+  }, [demoMode]);
 
   const animationPlayed = useRef(false);
 
@@ -133,7 +141,9 @@ export default function Dashboard() {
         candidates={candidates}
         selectedFilter={filter}
         onFilterChange={setFilter}
-        mode={candidates.length > 0 ? "Live Mode" : "Demo Mode"}
+        mode={demoMode ? "Demo Mode" : candidates.length > 0 ? "Live Mode" : "Demo Mode"}
+        demoMode={demoMode}
+        onToggleDemo={() => setDemoMode(!demoMode)}
       />
 
       <div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] h-[calc(100vh-120px)]">

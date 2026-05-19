@@ -4,7 +4,9 @@ export default function Header({
   candidates,
   selectedFilter,
   onFilterChange,
-  mode
+  mode,
+  demoMode,
+  onToggleDemo
 }) {
 
   const [currentTime, setCurrentTime] = useState(
@@ -49,6 +51,14 @@ export default function Header({
             <div className="h-2 w-2 rounded-full bg-[var(--accent)] animate-pulse" />
             {mode}
           </div>
+
+          <button
+            onClick={onToggleDemo}
+            className="px-3 py-1 rounded-sm border border-[var(--border-color)] text-xs tracking-[2px] text-[var(--text-muted)] hover:text-white hover:border-[var(--accent)] transition"
+            title={demoMode ? "Switch to Live Data" : "Switch to Demo Data"}
+          >
+            {demoMode ? "📊 Demo" : "🔴 Real"}
+          </button>
 
         </div>
 
